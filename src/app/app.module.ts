@@ -28,7 +28,11 @@ import { environment } from '../environments/environment';
     UserModule,
     AppRoutingModule,
     StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({ 
+      name: 'APM Demo App Devtool',
+      maxAge: 25, 
+      logOnly: environment.production 
+    })
   ],
   declarations: [
     AppComponent,
