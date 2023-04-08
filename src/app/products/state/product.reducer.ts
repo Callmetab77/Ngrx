@@ -37,10 +37,17 @@ export const getShowProductCode = createSelector(
     state => state.showProductCode
 );
 
+//sample of selector to get the specific productId
+export const getCurrentProductId = createSelector(
+    getProductFeatureState,
+    state => state.currentProduct.id
+)
 
 export const getCurrentProduct = createSelector(
     getProductFeatureState,
-    state => state.currentProduct
+    getCurrentProductId,
+    (state, currentProductId) => 
+        state.products.find(product => product.id === currentProductId)
 );
 
 export const getProducts = createSelector(
