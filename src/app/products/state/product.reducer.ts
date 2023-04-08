@@ -1,6 +1,7 @@
-import { createAction, createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
+import { createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
 import { Product } from "../product";
 import * as AppState from "../../state/app.state"
+import * as ProductActions from "./product.actions";
 
 export interface ProductState {
     showProductCode: boolean,
@@ -8,7 +9,7 @@ export interface ProductState {
     products: Product[]
 }
 
-export interface State extends AppState.State {
+export interface State extends AppState.State { 
     products: ProductState
 }
 
@@ -18,17 +19,6 @@ const initialState = {
     products: []
 }
 
-
-export const productReducer = createReducer<ProductState>(
-   initialState,
-    on(createAction('[Product] Toggle Product Code'), (state):ProductState => {
-        return { 
-            ...state,
-            showProductCode: !state.showProductCode
-        }
-    })
-);
-
 //SELECTORS AREA
 const getProductFeatureState = createFeatureSelector<ProductState>('products');
 
@@ -37,20 +27,47 @@ export const getShowProductCode = createSelector(
     state => state.showProductCode
 );
 
-//sample of selector to get the specific productId
-export const getCurrentProductId = createSelector(
-    getProductFeatureState,
-    state => state.currentProduct.id
-)
 
 export const getCurrentProduct = createSelector(
     getProductFeatureState,
-    getCurrentProductId,
-    (state, currentProductId) => 
-        state.products.find(product => product.id === currentProductId)
+    state => state.currentProduct
 );
 
 export const getProducts = createSelector(
     getProductFeatureState,
     state => state.products
 )
+
+export const productReducer = createReducer<ProductState>(
+    initialState,
+     on(ProductActions.toggleProductCode, (state):ProductState => {
+         return { 
+             ...state,
+             showProductCode: !state.showProductCode
+         }
+     }),
+     on(ProductActions.setCurrentProduct, (state, action) => {
+        return {
+            ...state,
+            currentProduct: action.product
+        }
+     }),
+     on(ProductActions.clearCurrentProduct, (state) => {
+        return {
+            ...state,
+            currentProduct: null
+        }
+     }),
+     on(ProductActions.initCurrentProduct , (state) => {
+        return {
+            ...state,
+            currentProduct: {
+                id: 0,
+                productName: '',
+                productCode: 'New',
+                description: '',
+                starRating: 0
+            }
+        }
+     })
+ );
