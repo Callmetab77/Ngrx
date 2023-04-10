@@ -13,12 +13,6 @@ export interface State extends AppState.State {
     products: ProductState
 }
 
-const initialState = {
-    showProductCode: true,
-    currentProduct: null,
-    products: []
-}
-
 //SELECTORS AREA
 const getProductFeatureState = createFeatureSelector<ProductState>('products');
 
@@ -37,6 +31,12 @@ export const getProducts = createSelector(
     getProductFeatureState,
     state => state.products
 )
+
+const initialState = {
+    showProductCode: true,
+    currentProduct: null,
+    products: []
+}
 
 export const productReducer = createReducer<ProductState>(
     initialState,
